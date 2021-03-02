@@ -1,0 +1,469 @@
+<?php
+namespace UltimateAddons\Widgets;
+
+use Elementor\Widget_Base;
+use Elementor\Controls_Manager;
+
+/**
+ * Elementor Hello World
+ *
+ * Elementor widget for hello world.
+ *
+ * @since 1.0.0
+ */
+class ulad_addon_card extends Widget_Base {
+
+	/**
+	 * Retrieve the widget name.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @access public
+	 *
+	 * @return string Widget name.
+	 */
+	public function get_name() {
+		return 'card';
+	}
+
+	/**
+	 * Retrieve the widget title.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @access public
+	 *
+	 * @return string Widget title.
+	 */
+	public function get_title() {
+		return esc_html__( 'Card', 'ultimate-addons' );
+	}
+
+	/**
+	 * Retrieve the widget icon.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @access public
+	 *
+	 * @return string Widget icon.
+	 */
+	public function get_icon() {
+		return 'fa fa-caret-square-o-up';
+	}
+
+	/**
+	 * Retrieve the list of categories the widget belongs to.
+	 *
+	 * Used to determine where to display the widget in the editor.
+	 *
+	 * Note that currently Elementor supports only one category.
+	 * When multiple categories passed, Elementor uses the first one.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @access public
+	 *
+	 * @return array Widget categories.
+	 */
+	public function get_categories() {
+		return [ 'ultimate-addons' ];
+	}
+
+	/**
+	 * Retrieve the list of scripts the widget depended on.
+	 *
+	 * Used to set scripts dependencies required to run the widget.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @access public
+	 *
+	 * @return array Widget scripts dependencies.
+	 */
+	public function get_script_depends() {
+		return [ 'venus-carosle' ];
+	}
+
+	/**
+	 * Register the widget controls.
+	 *
+	 * Adds different input fields to allow the user to change and customize the widget settings.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @access protected
+	 */
+	protected function _register_controls() {
+
+		$this->start_controls_section(
+			'section_content',
+			[
+				'label' => esc_html__( 'Content', 'ultimate-addons' ),
+			]
+		);
+
+		$this->add_control(
+			'style',
+			array(
+			  'label'       => esc_html__('Style', 'unlimited-addonr'),
+			  'type'        => \Elementor\Controls_Manager::SELECT,
+			  'default'     => 'style1',
+			  'label_block' => true,
+			  'options' => array(
+				'style1' => esc_html__('Style 1', 'unlimited-addonr'),
+				'style2' => esc_html__('Style 2', 'unlimited-addonr'),
+				'style3' => esc_html__('Style 3', 'unlimited-addonr'),
+			  )
+			)
+		  );
+
+		$this->add_control(
+			'image',
+			[
+				'label' => esc_html__( 'Choose Image', 'ultimate-addons' ),
+				'type' => \Elementor\Controls_Manager::MEDIA,
+				'default' => [
+					'url' => \Elementor\Utils::get_placeholder_image_src(),
+				],
+			]
+		);
+
+		$this->add_control(
+			'title',
+			[
+				'label' => esc_html__( 'Title', 'ultimate-addons' ),
+				'type' => \Elementor\Controls_Manager::TEXT,
+				'default' => esc_html__( 'Default title', 'ultimate-addons' ),
+				'placeholder' => esc_html__( 'Type your title here', 'ultimate-addons' ),
+			]
+		);
+
+		$this->add_control(
+			'description',
+			[
+				'label' => esc_html__( 'Description', 'ultimate-addons' ),
+				'type' => \Elementor\Controls_Manager::TEXTAREA,
+				'rows' => 10,
+				'default' => esc_html__( 'Default description', 'ultimate-addons' ),
+				'placeholder' => esc_html__( 'Type your description here', 'ultimate-addons' ),
+			]
+		);
+
+		$this->add_control( 'btn_title', [
+			'label'   => esc_html__( 'Button Text', 'ultimate-addons' ),
+			'type'    => \Elementor\Controls_Manager::TEXT,
+			'default' => esc_html__( 'Button Text', 'ultimate-addons' )
+		] );
+
+		$this->add_control( 'button_url', [
+			'label' => esc_html__( 'Button URL', 'ultimate-addons' ),
+			'type'  => \Elementor\Controls_Manager::URL,
+		] );
+
+		$this->end_controls_section();
+
+		$this->start_controls_section(
+			'alignment_style',
+			[
+				'label' => esc_html__( 'Alignment', 'ultimate-addons' ),
+				'tab' => Controls_Manager::TAB_STYLE,
+			]
+		);
+
+		$this->add_control( 'display_alignment', [
+			'label'   => esc_html__( 'Alignment ', 'ultimate-addons' ),
+			'type'    => \Elementor\Controls_Manager::SELECT,
+			'options' => [
+				'text-center'    => esc_html__( 'Center', 'ultimate-addons' ),
+				'text-left'   => esc_html__( 'Left', 'ultimate-addons' ),
+
+			],
+			'default' => 'text-left'
+		] );
+
+		$this->end_controls_section();
+
+		$this->start_controls_section(
+			'title_style',
+			[
+				'label' => esc_html__( 'Title', 'ultimate-addons' ),
+				'tab' => Controls_Manager::TAB_STYLE,
+			]
+		);
+
+		$this->add_control(
+			'color',
+			[
+				'label' => esc_html__( 'Title Color', 'ultimate-addons' ),
+				'type' => \Elementor\Controls_Manager::COLOR,
+				'scheme' => [
+					'type' => \Elementor\Scheme_Color::get_type(),
+					'value' => \Elementor\Scheme_Color::COLOR_1,
+				],
+				'selectors' => [
+					'{{WRAPPER}} .eae-card .card-title' => 'color: {{VALUE}}',
+				],
+			]
+		);
+
+		$this->add_group_control(
+			\Elementor\Group_Control_Typography::get_type(),
+			[
+				'name' => 'title_typography',
+				'label' => esc_html__( 'Title Typography', 'ultimate-addons' ),
+				'scheme' => \Elementor\Scheme_Typography::TYPOGRAPHY_1,
+				'selector' => '{{WRAPPER}} .eae-card .card-title'
+			]
+		);
+
+		$this->add_control(
+			'padding',
+			[
+				'label' => esc_html__( 'Padding', 'ultimate-addons' ),
+				'type' => Controls_Manager::DIMENSIONS,
+				'size_units' => [ 'px', '%', 'em' ],
+				'selectors' => [
+					'{{WRAPPER}} .eae-card .card-title' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+				],
+			]
+		);
+
+		$this->end_controls_section();
+
+		$this->start_controls_section(
+			'dcontent_style',
+			[
+				'label' => esc_html__( 'Content', 'ultimate-addons' ),
+				'tab' => Controls_Manager::TAB_STYLE,
+			]
+		);
+
+		$this->add_control(
+			'content_color',
+			[
+				'label' => esc_html__( 'Content Color', 'ultimate-addons' ),
+				'type' => \Elementor\Controls_Manager::COLOR,
+				'scheme' => [
+					'type' => \Elementor\Scheme_Color::get_type(),
+					'value' => \Elementor\Scheme_Color::COLOR_1,
+				],
+				'selectors' => [
+					'{{WRAPPER}} .eae-card .card-text' => 'color: {{VALUE}}',
+				],
+			]
+		);
+
+		$this->add_group_control(
+			\Elementor\Group_Control_Typography::get_type(),
+			[
+				'name' => 'content_typography',
+				'label' => esc_html__( 'Content Typography', 'ultimate-addons' ),
+				'scheme' => \Elementor\Scheme_Typography::TYPOGRAPHY_1,
+				'selector' => '{{WRAPPER}} .eae-card .card-text'
+			]
+		);
+
+		$this->add_control(
+			'content_padding',
+			[
+				'label' => esc_html__( 'Padding', 'ultimate-addons' ),
+				'type' => Controls_Manager::DIMENSIONS,
+				'size_units' => [ 'px', '%', 'em' ],
+				'selectors' => [
+					'{{WRAPPER}} .eae-card .card-text' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+				],
+			]
+		);
+
+		$this->end_controls_section();
+
+		$this->start_controls_section(
+			'button_style',
+			[
+				'label' => esc_html__( 'Button', 'ultimate-addons' ),
+				'tab' => Controls_Manager::TAB_STYLE,
+			]
+		);
+
+		$this->add_control(
+			'button_color',
+			[
+				'label' => esc_html__( 'Button Color', 'ultimate-addons' ),
+				'type' => \Elementor\Controls_Manager::COLOR,
+				'scheme' => [
+					'type' => \Elementor\Scheme_Color::get_type(),
+					'value' => \Elementor\Scheme_Color::COLOR_1,
+				],
+				'selectors' => [
+					'{{WRAPPER}} .eae-card .card-body a' => 'color: {{VALUE}}',
+				],
+			]
+		);
+
+		$this->add_control(
+			'button_bg',
+			[
+				'label' => esc_html__( 'Background Color', 'ultimate-addons' ),
+				'type' => \Elementor\Controls_Manager::COLOR,
+				'scheme' => [
+					'type' => \Elementor\Scheme_Color::get_type(),
+					'value' => \Elementor\Scheme_Color::COLOR_1,
+				],
+				'selectors' => [
+					'{{WRAPPER}} .eae-card .card-body a' => 'background: {{VALUE}}',
+				],
+			]
+		);
+
+		$this->add_control(
+			'button_border',
+			[
+				'label' => esc_html__( 'Border Color', 'ultimate-addons' ),
+				'type' => \Elementor\Controls_Manager::COLOR,
+				'scheme' => [
+					'type' => \Elementor\Scheme_Color::get_type(),
+					'value' => \Elementor\Scheme_Color::COLOR_1,
+				],
+				'selectors' => [
+					'{{WRAPPER}} .eae-card .card-body a' => 'border-color: {{VALUE}}',
+				],
+			]
+		);
+
+		$this->add_group_control(
+			\Elementor\Group_Control_Typography::get_type(),
+			[
+				'name' => 'button_typography',
+				'label' => esc_html__( 'Button Typography', 'ultimate-addons' ),
+				'scheme' => \Elementor\Scheme_Typography::TYPOGRAPHY_1,
+				'selector' => '{{WRAPPER}} .eae-card .card-body a'
+			]
+		);
+
+		$this->add_control(
+			'button_padding',
+			[
+				'label' => esc_html__( 'Padding', 'ultimate-addons' ),
+				'type' => Controls_Manager::DIMENSIONS,
+				'size_units' => [ 'px', '%', 'em' ],
+				'selectors' => [
+					'{{WRAPPER}} .eae-card .card-body a' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+				],
+			]
+		);
+
+		$this->end_controls_section();
+
+	}
+
+	/**
+	 * Render the widget output on the frontend.
+	 *
+	 * Written in PHP and used to generate the final HTML.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @access protected
+	 */
+	protected function render() {
+		$settings = $this->get_settings_for_display();
+		$style    = $settings['style'];
+		$image = $settings['image'];
+	?>
+	<?php
+    switch ($style) {
+      case 'style1': default: ?>
+		<!-- Card -->
+		<div class="card eae-card <?php echo esc_attr($settings['display_alignment']); ?>">
+		<!-- Card image -->
+		<div class="view overlay">
+			<img class="card-img-top" src="<?php echo esc_url($image['url']); ?>"
+			alt="Card image cap">
+			<a href="#!">
+			<div class="mask rgba-white-slight"></div>
+			</a>
+		</div>
+		<!-- Card content -->
+		<div class="card-body">
+			<!-- Title -->
+			<h4 class="card-title"><?php echo esc_html($settings['title']); ?></h4>
+			<!-- Text -->
+			<p class="card-text"><?php echo wp_kses_post($settings['description']); ?></p>
+			<!-- Button -->
+			<a href="<?php echo esc_url($settings['button_url']['url']); ?>" class="btn btn-primary"><?php echo esc_html($settings['btn_title']); ?></a>
+		</div>
+		</div>
+		<!-- Card -->
+
+	<?php
+        # code...
+        break;
+      case 'style2': ?>
+
+		<!-- Card -->
+		<div class="eae-card card card-cascade wider reverse <?php echo esc_attr($settings['display_alignment']); ?>">
+		<!-- Card image -->
+		<div class="view view-cascade overlay">
+			<img class="card-img-top" src="<?php echo esc_url($image['url']); ?>"
+			alt="Card image cap">
+			<a href="#!">
+			<div class="mask rgba-white-slight"></div>
+			</a>
+		</div>
+		<!-- Card content -->
+		<div class="card-body card-body-cascade text-center">
+			<!-- Title -->
+			<h4 class="card-title"><strong><?php echo esc_html($settings['title']); ?></strong></h4>
+			<!-- Text -->
+			<p class="card-text"><?php echo wp_kses_post($settings['description']); ?>
+			</p>
+			<a href="<?php echo esc_url($settings['button_url']['url']); ?>" class="btn btn-primary"><?php echo esc_html($settings['btn_title']); ?></a>
+		</div>
+		</div>
+		<!-- Card -->
+		<?php
+        # code...
+        break;
+      case 'style3': ?>
+		<!-- Card Light -->
+		<div class="card eae-card">
+		<!-- Card image -->
+		<div class="view overlay">
+			<img class="card-img-top"
+			src="<?php echo esc_url($image['url']); ?>" alt="Card image cap">
+			<a>
+			<div class="mask rgba-white-slight"></div>
+			</a>
+		</div>
+		<!-- Card content -->
+		<div class="card-body">
+			<!-- Title -->
+			<h4 class="card-title"><?php echo esc_html($settings['title']); ?></h4>
+			<hr>
+			<!-- Text -->
+			<p class="card-text"><?php echo wp_kses_post($settings['description']); ?></p>
+			<!-- Link -->
+			<a href="<?php echo esc_url($settings['button_url']['url']); ?>" class="black-text d-flex justify-content-end ulad-icon-area">
+			<?php echo esc_html($settings['btn_title']); ?><i class="fas fa-angle-double-right"></i>
+			</a>
+		</div>
+		</div>
+		<!-- Card Light -->
+	<?php
+		break;
+    }
+	}
+
+	/**
+	 * Render the widget output in the editor.
+	 *
+	 * Written as a Backbone JavaScript template and used to generate the live preview.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @access protected
+	 */
+	protected function _content_template() {}
+
+}
